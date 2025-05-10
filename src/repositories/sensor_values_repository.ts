@@ -26,16 +26,16 @@ export const SensorValuesRepository: Repository<SensorValue, "timestamp"> = {
     return value;
   },
 
-  async read(id) {
-    const value = database.sensorValues.find((value) => value.id === id);
+  async read(timestamp) {
+    const value = database.sensorValues.find((value) => value.timestamp === timestamp);
     if (!value) {
-      throw new Error(`Failed to find SensorValue with id '${id}'`);
+      throw new Error(`Failed to find SensorValue with timestamp '${timestamp}'`);
     }
     return value;
   },
 
   async update(timestamp, data) {
-    const index = database.sensorValues.findIndex((value) => value.id === timestamp);
+    const index = database.sensorValues.findIndex((value) => value.timestamp === timestamp);
     if (index === -1) {
       throw new Error(`Failed to find SensorValue with timestamp '${timestamp}'`);
     }
