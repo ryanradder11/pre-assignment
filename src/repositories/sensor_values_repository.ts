@@ -37,7 +37,7 @@ export const SensorValuesRepository: Repository<SensorValue> = {
 
   async update(id, data) {
     const index = database.sensorValues.findIndex((value) => value.id === id);
-    if (!index) {
+    if (index === -1) {
       throw new Error(`Failed to find SensorValue with id '${id}'`);
     }
     const value = { id, ...data };
@@ -45,5 +45,17 @@ export const SensorValuesRepository: Repository<SensorValue> = {
     return value;
   },
 
-  async delete(id) {},
+  async delete(id) {
+
+    if (isNaN(id) || id < 0) {
+      throw new TypeError(`Invalid 'id' provided: expected a non-negative number, received '${id}'`);
+    }
+
+    const index = database.sensorValues.findIndex((value) => value.sensor_id === id);
+
+    if (index === -1) {
+      throw new Error(`Failed to find SensorValue with id '${id}'`);
+    }
+    delete database.sensorValues[index];
+  },
 };
