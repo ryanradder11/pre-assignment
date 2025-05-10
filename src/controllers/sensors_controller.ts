@@ -21,10 +21,10 @@ export const SensorsController: Controller = {
       (value) => value.sensor_id === id
     );
 
-    ctx.body = {
-      ...sensor,
-      values,
-    };
+    ctx.body = values.map(value => {
+      const average = Math.round(value.values.reduce((sum, n) => sum + n, 0) / value.values.length);
+      return [value.timestamp, average];
+    });
   },
 
   async update(ctx) {

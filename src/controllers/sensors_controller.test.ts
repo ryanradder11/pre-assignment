@@ -30,24 +30,16 @@ describe("SensorsController", () => {
     const ctx = { params: { id: 1 }, body: {} } as unknown as Koa.Context;
     await SensorsController.read(ctx);
 
-    assert.deepEqual(ctx.body, {
-      id: 1,
-      name: "Sensor Name",
-      values: [
-        {
-          id: 1,
-          sensor_id: 1,
-          timestamp: 123456789,
-          values: [1, 2, 3],
-        },
-        {
-          id: 2,
-          timestamp: 123456790,
-          sensor_id: 1,
-          values: [5, 4, 3],
-        },
+    assert.deepEqual(ctx.body,[
+      [
+        123456789,
+        2
       ],
-    });
+      [
+        123456790,
+        4
+      ]
+    ]);
   });
 
   it("should update sensors correctly", async () => {
