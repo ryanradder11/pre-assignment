@@ -16,10 +16,30 @@ export const SensorsController: Controller = {
       })
       .parse(ctx.params);
 
-    const sensor = await SensorsRepository.read(id);
-    const values = await SensorValuesRepository.list(
-      (value) => value.sensor_id === id
-    );
+    let sensor;
+    try {
+      sensor = await SensorsRepository.read(id);
+      if (!sensor) {
+        ctx.throw(404, `Sensor with id '${id}' not found`);
+      }
+    } catch (err) {
+      ctx.throw(500, "Failed to load sensor");
+    }
+
+    let values;
+    try {
+      values = await SensorValuesRepository.list(value => value.sensor_id === id);
+      if (values.length === 0) {
+        ctx.throw(404, `No values found for sensor ${id}`);
+      }
+    } catch (err) {
+      ctx.throw(500, "Failed to load sensor values");
+    }
+
+    if (!values || values.length === 0) {
+      ctx.body = [];
+      return;
+    }
 
     ctx.body = values.map(value => {
       const average = Math.round(value.values.reduce((sum, n) => sum + n, 0) / value.values.length);
