@@ -7,7 +7,7 @@ export type Sensor = {
   name: string;
 };
 
-export const SensorsRepository: Repository<Sensor> = {
+export const SensorsRepository: Repository<Sensor, "id"> = {
   async list(filter) {
     if (filter) {
       return Object.values(database.sensors).filter(filter);

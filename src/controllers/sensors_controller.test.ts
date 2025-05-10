@@ -17,11 +17,13 @@ describe("SensorsController", () => {
     }
     SensorsRepository.create({ name: "Sensor Name" });
     SensorValuesRepository.create({
+      // @ts-ignore
       timestamp: 123456789,
       sensor_id: 1,
       values: [1, 2, 3],
     });
     SensorValuesRepository.create({
+      // @ts-ignore
       timestamp: 123456790,
       sensor_id: 1,
       values: [5, 4, 3],

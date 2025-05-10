@@ -10,8 +10,9 @@ export const seed = () => {
     Array(10)
       .keys()
       .map((i) => {
-        SensorValuesRepository.create({
+          SensorValuesRepository.create({
           sensor_id: 1,
+          // @ts-ignore
           timestamp: Date.now() - i * 100,
           values: [i, i, i],
         });

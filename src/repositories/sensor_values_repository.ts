@@ -9,7 +9,7 @@ export type SensorValue = {
   values: number[];
 };
 
-export const SensorValuesRepository: Repository<SensorValue> = {
+export const SensorValuesRepository: Repository<SensorValue, "timestamp"> = {
   async list(filter) {
     if (filter) {
       return database.sensorValues.filter(filter);
@@ -18,9 +18,8 @@ export const SensorValuesRepository: Repository<SensorValue> = {
   },
 
   async create(data) {
-    const id = autoIncrement(database.sensorValues.map((value) => value.id));
     const value: SensorValue = {
-      id,
+      timestamp: Date.now(),
       ...data,
     };
     database.sensorValues.push(value);
@@ -35,26 +34,22 @@ export const SensorValuesRepository: Repository<SensorValue> = {
     return value;
   },
 
-  async update(id, data) {
-    const index = database.sensorValues.findIndex((value) => value.id === id);
+  async update(timestamp, data) {
+    const index = database.sensorValues.findIndex((value) => value.id === timestamp);
     if (index === -1) {
-      throw new Error(`Failed to find SensorValue with id '${id}'`);
+      throw new Error(`Failed to find SensorValue with timestamp '${timestamp}'`);
     }
-    const value = { id, ...data };
-    database.sensorValues[index] = value;
+    const value = { timestamp, ...data };
+    database.sensorValues[timestamp] = value;
     return value;
   },
 
-  async delete(id) {
+  async delete(timestamp) {
 
-    if (isNaN(id) || id < 0) {
-      throw new TypeError(`Invalid 'id' provided: expected a non-negative number, received '${id}'`);
-    }
-
-    const index = database.sensorValues.findIndex((value) => value.sensor_id === id);
+    const index = database.sensorValues.findIndex((value) => value.timestamp === timestamp);
 
     if (index === -1) {
-      throw new Error(`Failed to find SensorValue with id '${id}'`);
+      throw new Error(`Failed to find SensorValue with timestamp '${timestamp}'`);
     }
     delete database.sensorValues[index];
   },
