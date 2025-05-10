@@ -54,10 +54,10 @@ describe("SensorValuesRepository", () => {
       values: [3, 2, 1],
     };
 
-    await SensorValuesRepository.create(entry1);
+    const sensorValue = await SensorValuesRepository.create(entry1);
     await SensorValuesRepository.create(entry2);
 
-    await SensorValuesRepository.delete(entry1.sensor_id);
+    await SensorValuesRepository.delete(sensorValue.id);
 
     const remaining = await SensorValuesRepository.list(() => true);
 
