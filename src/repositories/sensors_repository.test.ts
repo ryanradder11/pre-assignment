@@ -41,4 +41,13 @@ describe("SensorsRepository", () => {
     assert.deepEqual(updatedSensor, expected);
     assert.deepEqual(await SensorsRepository.list(), [expected]);
   });
+
+  it("should delete a record correctly", async () => {
+    const sensor = await SensorsRepository.create({ name: "BedSense X" });
+
+    await SensorsRepository.delete(sensor.id);
+
+    const results = await SensorsRepository.list();
+    assert.deepEqual(results, []);
+  });
 });
